@@ -1,4 +1,4 @@
-# InternetExplorer
+# SpiderFox
 Cumulative link following web scraper
 
 ## How to use
