@@ -42,6 +42,32 @@ namespace InternetExplorer
         // Method sets the startup parameters of the application
         static void ReadInput()
         {
+            if (_db.Discoverys.Any())
+            {
+                bool discoveriesMade = true;
+
+                while (discoveriesMade)
+                {
+                    Console.WriteLine("Existing records have been found in the database");
+                    Console.Write("Do you want to delete them and start fresh? (y/n): ");
+                    string input = Console.ReadLine().ToLower();
+
+                    switch (input)
+                    {
+                        case "y":
+                            _db.Discoverys.RemoveRange(_db.Discoverys.AsEnumerable());
+                            _db.SaveChangesAsync();
+                            discoveriesMade = false;
+                            break;
+                        case "n":
+                            discoveriesMade = false;
+                            break;
+                        default: break;
+                    }
+                }
+
+            }
+
             while (true)
             {
                 Console.Write("Please enter the starting URL: ");

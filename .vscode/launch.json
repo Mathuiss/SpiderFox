@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/InternetExplorer.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/SpiderFox.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
