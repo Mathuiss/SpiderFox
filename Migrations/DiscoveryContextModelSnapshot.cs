@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace InternetExplorer.Migrations
+namespace SpiderFox.Migrations
 {
     [DbContext(typeof(DiscoveryContext))]
     partial class DiscoveryContextModelSnapshot : ModelSnapshot

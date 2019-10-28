@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace InternetExplorer.Migrations
+namespace SpiderFox.Migrations
 {
     [DbContext(typeof(DiscoveryContext))]
-    [Migration("20191004175709_InitDb")]
-    partial class InitDb
+    [Migration("20191028220818_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,8 +19,7 @@ namespace InternetExplorer.Migrations
 
             modelBuilder.Entity("InternetExplorer.Discovery", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id");
 
                     b.Property<string>("Url");
 

@@ -11,7 +11,7 @@ namespace InternetExplorer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"Data Source=internetexplorer.db;");
+            optionsBuilder.UseSqlite(@"Data Source=sf.db;");
         }
     }
 }
