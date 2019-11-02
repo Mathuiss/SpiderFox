@@ -210,10 +210,16 @@ namespace InternetExplorer
             foreach (Match match in matches)
             {
                 string res = match.ToString();
-                res = res.Replace("<a href=\"", "");
+                res = res.Replace("<a href=\"", "")
+                    .Replace("\"", "");
                 // Also clean up the remaining values in the <a> tag
                 // Irregularities uccur at: <a href="blieblabloe.com" x="y">
                 res = res.Replace("\"", "");
+
+                if (res.StartsWith("//www"))
+                {
+                    res = res.Replace("//www", "www");
+                }
 
                 if (!res.StartsWith("http") && !res.StartsWith("www"))
                 {
