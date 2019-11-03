@@ -61,6 +61,7 @@ namespace InternetExplorer
                             break;
                         case "n":
                             discoveriesMade = false;
+                            _isFirst = false;
 
                             while (true)
                             {
@@ -230,49 +231,49 @@ namespace InternetExplorer
 
             foreach (Match match in matches)
             {
-                string res = match.ToString();
-                res = res.Replace("<a href=\"", "")
-                    .Replace("\"", "");
-                // Also clean up the remaining values in the <a> tag
-                // Irregularities uccur at: <a href="blieblabloe.com" x="y">
-
-                if (res.StartsWith("//www"))
+                try
                 {
-                    res = res.Replace("//www", "www");
-                }
+                    string res = match.ToString();
+                    res = res.Replace("<a href=\"", "")
+                        .Replace("\"", "");
+                    // Also clean up the remaining values in the <a> tag
+                    // Irregularities uccur at: <a href="blieblabloe.com" x="y">
 
-                if (!res.StartsWith("http") && !res.StartsWith("www"))
-                {
-                    if (!res.StartsWith("/"))
+                    if (res.StartsWith("//www"))
                     {
-                        res = res.Replace(res, $"/{res}");
+                        res = res.Replace("//www", "www");
                     }
 
+                    if (!res.StartsWith("http") && !res.StartsWith("www"))
+                    {
+                        if (!res.StartsWith("/"))
+                        {
+                            res = res.Replace(res, $"/{res}");
+                        }
+
+                        res = res.Replace(res, $"{currentSite}{res}");
+                    }
+
+                    // Check if result is duplicate and discovery is invalid
+                    // Then continue to next discovery
+                    // Else add discovery to the list
                     try
                     {
-                        res = res.Replace(res, $"{currentSite}{res}");
+                        if (_db.Discoverys.Any(d => d.Url == res))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            long id = _discoveries + 1;
+                            _discoveries++;
+                            resList.Add(new Discovery(id, res));
+                        }
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
                         continue;
-                    }
-                }
-
-                // Check if result is duplicate and discovery is invalid
-                // Then continue to next discovery
-                // Else add discovery to the list
-                try
-                {
-                    if (_db.Discoverys.Any(d => d.Url == res))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        long id = _discoveries + 1;
-                        _discoveries++;
-                        resList.Add(new Discovery(id, res));
                     }
                 }
                 catch (Exception ex)
