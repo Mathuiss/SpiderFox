@@ -235,7 +235,6 @@ namespace InternetExplorer
                     .Replace("\"", "");
                 // Also clean up the remaining values in the <a> tag
                 // Irregularities uccur at: <a href="blieblabloe.com" x="y">
-                res = res.Replace("\"", "");
 
                 if (res.StartsWith("//www"))
                 {

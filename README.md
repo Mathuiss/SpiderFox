@@ -25,6 +25,8 @@ This id corresponds with the position in the queue this 'Discovery' has to be sc
 The application saves the found links and asks for the next link in the queue.
 
 ## Planned
+Fix the bug that causes discoveries to go up but not enter the database, and eventually causes the scraper to crash.
+
 I'm planning to make the application multi threaded or at least do the downloading of the page and the actual scraping either asynchonously or concurrently.
 
 Create logger static class with log levels.
