@@ -61,23 +61,44 @@ namespace InternetExplorer
                             break;
                         case "n":
                             discoveriesMade = false;
+
+                            while (true)
+                            {
+                                Console.Write($"Enter the scrape number you want to continue from: ");
+
+                                try
+                                {
+                                    _scrapes = int.Parse(Console.ReadLine());
+                                    _entryPoint = GetCurrentRecord(_scrapes);
+                                    break;
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Please enter an integer");
+                                }
+                            }
                             break;
                         default: break;
                     }
                 }
-
             }
 
             while (true)
             {
-                Console.Write("Please enter the starting URL: ");
-                string input = Console.ReadLine();
-
-                //Check if request is returned
-
-                if (!string.IsNullOrEmpty(SendRequest(input)))
+                if (_entryPoint == null)
                 {
-                    _entryPoint = input;
+                    Console.Write("Please enter the starting URL: ");
+                    string input = Console.ReadLine();
+
+                    //Check if request is returned
+                    if (!string.IsNullOrEmpty(SendRequest(input)))
+                    {
+                        _entryPoint = input;
+                        break;
+                    }
+                }
+                else
+                {
                     break;
                 }
             }
@@ -223,6 +244,11 @@ namespace InternetExplorer
 
                 if (!res.StartsWith("http") && !res.StartsWith("www"))
                 {
+                    if (!res.StartsWith("/"))
+                    {
+                        res = res.Replace(res, $"/{res}");
+                    }
+
                     try
                     {
                         res = res.Replace(res, $"{currentSite}{res}");
