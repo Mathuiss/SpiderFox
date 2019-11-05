@@ -39,6 +39,8 @@ namespace InternetExplorer
             Environment.Exit(0);
         }
 
+        #region Setup
+
         // Method sets the startup parameters of the application
         static void ReadInput()
         {
@@ -123,6 +125,9 @@ namespace InternetExplorer
             }
         }
 
+        #endregion Setup
+        #region MainLoop
+
         static void RunScraper()
         {
             if (_maxRequests != 0)
@@ -177,6 +182,9 @@ namespace InternetExplorer
             _scrapes++;
         }
 
+        #endregion MainLoop
+        #region DatabaseControl
+
         // Gets the highest record from database on startup
         static Discovery GetHighestRecord()
         {
@@ -212,6 +220,22 @@ namespace InternetExplorer
                 throw ex;
             }
         }
+
+        // Saves the discoveries that were found
+        static void SaveUrls(Discovery[] urls)
+        {
+            for (int i = 0; i < urls.Length; i++)
+            {
+
+                _db.Discoverys.Add(urls[i]);
+                Console.WriteLine($"Saving: {urls[i].Id} {urls[i].Url}");
+            }
+
+            _db.SaveChangesAsync();
+        }
+
+        #endregion DatabaseControl
+        #region ScrapeLogic
 
         // Sends request to url to retrieve web page
         static string SendRequest(string url)
@@ -286,17 +310,6 @@ namespace InternetExplorer
             return resList.ToArray();
         }
 
-        // Saves the discoveries that were found
-        static void SaveUrls(Discovery[] urls)
-        {
-            for (int i = 0; i < urls.Length; i++)
-            {
-
-                _db.Discoverys.Add(urls[i]);
-                Console.WriteLine($"Saving: {urls[i].Id} {urls[i].Url}");
-            }
-
-            _db.SaveChangesAsync();
-        }
+        #endregion ScrapeLogic
     }
 }
