@@ -1,6 +1,16 @@
 # SpiderFox
 Cumulative link following web scraper
 
+## Installation
+The application is a stand-alone executable.
+If you already have a database (sqlite), place it in the folder where the application is located.
+If you have no database you need to let the application create one for you.
+When the application starts the database will be created.
+The tables, however will not be.
+This is why there is a create script in the Utils folder.
+You can execute this sql script on the database and re-run the application.
+Everything should work normally now.
+
 ## How to use
 
 ### Modes
