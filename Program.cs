@@ -21,9 +21,10 @@ namespace InternetExplorer
         {
             // Initialize prerequisites
             _client = new HttpClient();
+            _db = new DiscoveryContext();
             _isFirst = true;
             _scrapes = 0;
-            _db = new DiscoveryContext();
+            _discoveries = 0;
             ReadInput();
 
             try
@@ -73,6 +74,8 @@ namespace InternetExplorer
                                 {
                                     _scrapes = int.Parse(Console.ReadLine());
                                     _entryPoint = GetCurrentRecord(_scrapes);
+                                    Console.WriteLine(GetHighestRecord().ToString());
+                                    _discoveries = GetHighestRecord().Id;
                                     break;
                                 }
                                 catch
@@ -108,7 +111,7 @@ namespace InternetExplorer
 
             while (true)
             {
-                Console.WriteLine("Please enter the maximum amount of requests you want to send.");
+                Console.WriteLine("Please enter the maximum amount of scrapes you want to perform.");
                 Console.Write("Enter 0 for infinite requests: ");
 
                 string input = Console.ReadLine();
@@ -168,6 +171,7 @@ namespace InternetExplorer
             if (_isFirst)
             {
                 Discovery highestRecord = GetHighestRecord();
+                _discoveries = highestRecord.Id;
                 string highestBody = SendRequest(highestRecord.Url);
                 _urls = FindUrls(highestBody, highestRecord.Url);
                 SaveUrls(_urls);
@@ -188,22 +192,19 @@ namespace InternetExplorer
         // Gets the highest record from database on startup
         static Discovery GetHighestRecord()
         {
-            try
+            if (_db.Discoverys.Any())
             {
-                var d = _db.Discoverys.First();
+                var d = _db.Discoverys.Last();
                 return d;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex.Message);
                 Console.WriteLine("Attempting to create first record...");
 
-                _discoveries = 0;
                 _db.Discoverys.Add(new Discovery(_discoveries, _entryPoint));
                 _db.SaveChangesAsync();
                 return new Discovery(_discoveries, _entryPoint);
             }
-
         }
 
         // Gets the record the scraper is on after one cycle
@@ -226,9 +227,7 @@ namespace InternetExplorer
         {
             for (int i = 0; i < urls.Length; i++)
             {
-
                 _db.Discoverys.Add(urls[i]);
-                Console.WriteLine($"Saving: {urls[i].Id} {urls[i].Url}");
             }
 
             _db.SaveChangesAsync();
@@ -240,7 +239,7 @@ namespace InternetExplorer
         // Sends request to url to retrieve web page
         static string SendRequest(string url)
         {
-            Console.WriteLine($"Sending request {_scrapes} to: {url}");
+            Console.WriteLine($"{_scrapes} request : {url}");
             return _client.GetStringAsync(url).Result;
         }
 
@@ -289,6 +288,7 @@ namespace InternetExplorer
                         }
                         else
                         {
+                            Console.WriteLine($"Discovered {_discoveries} {res}");
                             long id = _discoveries + 1;
                             _discoveries++;
                             resList.Add(new Discovery(id, res));
